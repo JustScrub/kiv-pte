@@ -46,8 +46,8 @@ public class ParallelBenchmarks extends BaseBenchmarks {
     }
 
     @Benchmark
-    public void parallel_filter(ParallelState state, FilterState filterState, Blackhole blackhole) {
-        blackhole.consume(list.parallelStream().filter(filterState.set::contains).count());
+    public void parallel_filter(FilterState filterState, Blackhole blackhole) {
+        blackhole.consume(list.parallelStream().filter(filterState.set::contains));
     }
 
     @Benchmark
