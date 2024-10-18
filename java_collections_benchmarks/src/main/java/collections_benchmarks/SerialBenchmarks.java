@@ -38,6 +38,7 @@ import org.openjdk.jmh.annotations.Param;
 import org.openjdk.jmh.annotations.Scope;
 import org.openjdk.jmh.annotations.Setup;
 import org.openjdk.jmh.annotations.State;
+import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.infra.Blackhole;
 
 public class SerialBenchmarks extends BaseBenchmarks {
@@ -92,43 +93,43 @@ public class SerialBenchmarks extends BaseBenchmarks {
     }
         
 
-    //@Benchmark
+    @Benchmark
     public void add_at_index(IndexedState state) {
         list.add(state.index, state.elem);
     }
 
-    //@Benchmark
+    @Benchmark
     public void add_all_start(AddAllState state) {
         list.addAll(0, state.list);
     }
 
-    //@Benchmark
+    @Benchmark
     public void add_all_end(AddAllState state) {
         // 1000x opakované přidání 1000 prvků na konec kolekce
         list.addAll(state.list);
     }
 
-    //@Benchmark
+    @Benchmark
     public void get_from_index(IndexedState state) {
         list.get(state.index);
     }
 
-    //@Benchmark
+    @Benchmark
     public void clear() {
         list.clear();
     }
 
-    //@Benchmark
+    @Benchmark
     public void sort() {
         list.sort(null);
     }
 
-    //@Benchmark
+    @Benchmark
     public void to_array(Blackhole bh) {
         bh.consume(list.toArray());
     }
 
-    //@Benchmark
+    @Benchmark
     public void list_iterator(IndexedState state, Blackhole bh) {
         java.util.ListIterator<Integer> it = list.listIterator(state.index);
         bh.consume(it);
