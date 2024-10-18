@@ -10,12 +10,14 @@ import org.openjdk.jmh.annotations.Scope;
 import org.openjdk.jmh.annotations.State;
 import org.openjdk.jmh.annotations.Warmup;
 import org.openjdk.jmh.annotations.Mode;
+import org.openjdk.jmh.annotations.OutputTimeUnit;
 
 @State(Scope.Benchmark)
 @BenchmarkMode(Mode.AverageTime)
 @Fork(value = 1, warmups = 0)
 @Warmup(iterations = 0)
-@Measurement(iterations = 1)
+@Measurement(iterations = 10, time = 1000, timeUnit = java.util.concurrent.TimeUnit.MILLISECONDS)
+@OutputTimeUnit(java.util.concurrent.TimeUnit.MILLISECONDS)
 public class BaseBenchmarks {
 
     List<Integer> list;
@@ -46,6 +48,7 @@ public class BaseBenchmarks {
                 list = new java.util.concurrent.CopyOnWriteArrayList<>();
                 break;
         }
+        System.gc();
     }
 
     public void elems_setup(SetupState state) {
@@ -53,5 +56,6 @@ public class BaseBenchmarks {
         for (int i = 0; i < state.size; i++) {
             list.add(i);
         }
+        System.gc();
     }
 }
