@@ -1,6 +1,7 @@
 package collections_benchmarks;
 
 import java.util.List;
+import java.util.Random;
 
 import org.openjdk.jmh.annotations.BenchmarkMode;
 import org.openjdk.jmh.annotations.Fork;
@@ -15,8 +16,8 @@ import org.openjdk.jmh.annotations.OutputTimeUnit;
 @State(Scope.Benchmark)
 @BenchmarkMode(Mode.SingleShotTime)
 @Fork(value = 3, warmups = 0)
-@Warmup(iterations = 5)//, time = 100, timeUnit = java.util.concurrent.TimeUnit.MILLISECONDS)
-@Measurement(iterations = 20)//, time = 100, timeUnit = java.util.concurrent.TimeUnit.MILLISECONDS)
+@Warmup(iterations = 10)//, time = 100, timeUnit = java.util.concurrent.TimeUnit.MILLISECONDS)
+@Measurement(iterations = 100)//, time = 100, timeUnit = java.util.concurrent.TimeUnit.MILLISECONDS)
 @OutputTimeUnit(java.util.concurrent.TimeUnit.MILLISECONDS)
 public class BaseBenchmarks {
 
@@ -53,9 +54,11 @@ public class BaseBenchmarks {
 
     public void elems_setup(SetupState state) {
         list.clear();
+        Random random = new Random();
         for (int i = 0; i < state.size; i++) {
-            list.add(i);
+            list.add(random.nextInt());
         }
+        random = null;
         System.gc();
     }
 }
