@@ -1,6 +1,9 @@
 package collections_benchmarks;
 
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.Random;
 
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.Level;
@@ -24,14 +27,21 @@ public class ParallelBenchmarks extends BaseBenchmarks {
 
     @State(Scope.Thread)
     public static class FilterState {
-        HashSet<Integer> set;
+        List<Boolean> list;
+        ListIterator<Boolean> listIterator;
 
         @Setup(Level.Trial)
         public void setup(ParallelState state) {
-            set = new HashSet<>();
-            for (int i = 0; i < state.size; i+= state.size / 10) {
-                set.add(i);
+            list = new ArrayList<>(state.size);
+            for (int i = 0; i < state.size; i++) {
+                list.add(true);
             }
+            // change random 10% of the elements to false
+            Random rand = new Random();
+            for (int i = 0; i < state.size / 10; i++) {
+                list.set(rand.nextInt(state.size), false);
+            }
+            listIterator = list.listIterator();
         }
     }
 
@@ -47,7 +57,7 @@ public class ParallelBenchmarks extends BaseBenchmarks {
 
     @Benchmark
     public void parallel_filter(FilterState filterState, Blackhole blackhole) {
-        blackhole.consume(list.parallelStream().filter(filterState.set::contains));
+        blackhole.consume(list.parallelStream().filter(e -> filterState.listIterator.next()));
     }
 
     @Benchmark
