@@ -57,7 +57,7 @@ public class SerialBenchmarks extends BaseBenchmarks {
 
     @State(Scope.Thread)
     public static class IndexedState {
-        @Param({"10", "20"})//, "30", "40", "50", "60", "70", "80", "90", "100"})
+        @Param({"10", "20", "30", "40", "50", "60", "70", "80", "90", "100"})
         int progress;
         int index;
         int elem;

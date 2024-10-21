@@ -13,10 +13,10 @@ import org.openjdk.jmh.annotations.Mode;
 import org.openjdk.jmh.annotations.OutputTimeUnit;
 
 @State(Scope.Benchmark)
-@BenchmarkMode(Mode.AverageTime)
-@Fork(value = 1, warmups = 0)
-@Warmup(iterations = 0)
-@Measurement(iterations = 10, time = 1000, timeUnit = java.util.concurrent.TimeUnit.MILLISECONDS)
+@BenchmarkMode(Mode.SingleShotTime)
+@Fork(value = 3, warmups = 0)
+@Warmup(iterations = 5)//, time = 100, timeUnit = java.util.concurrent.TimeUnit.MILLISECONDS)
+@Measurement(iterations = 20)//, time = 100, timeUnit = java.util.concurrent.TimeUnit.MILLISECONDS)
 @OutputTimeUnit(java.util.concurrent.TimeUnit.MILLISECONDS)
 public class BaseBenchmarks {
 
@@ -27,7 +27,7 @@ public class BaseBenchmarks {
         public enum ListType {
             ARRAY_LIST, LINKED_LIST, VECTOR, COPY_ON_WRITE_ARRAY_LIST
         }
-        @Param({"200", "800"})//, "1200", "2000", "8000"})
+        @Param({"128", "512", "2048", "8192", "32768"})
         int size;
 
         abstract ListType get_list_type();
