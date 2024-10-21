@@ -2,10 +2,13 @@ import sys,json
 from elasticsearch import Elasticsearch
 
 def create_index(es: Elasticsearch, index_name="java_collections_benchmarks"):
-    es.indices.create(index=index_name, ignore=400)
+    es.options(ignore_status=400).indices.create(index=index_name)
 
 def delete_index(es: Elasticsearch, index_name="java_collections_benchmarks"):
-    es.indices.delete(index=index_name, ignore=[400, 404])
+    es.options(ignore_status=404).indices.delete(index=index_name)
+
+def clear_index(es: Elasticsearch, index_name="java_collections_benchmarks"):
+    es.delete_by_query(index=index_name, body={"query": {"match_all": {}}})
 
 def upload_doc(es: Elasticsearch, doc: dict, index_name="java_collections_benchmarks"):
     es.index(index=index_name, body=doc)
@@ -20,6 +23,10 @@ def doc_iterator(file_path: str):
         raise ValueError("Expected a list of objects")
     
     for doc in docs:
+        doc["params"]["size"] = int(doc["params"]["size"])
+        if "progress" in doc["params"]:
+            doc["params"]["progress"] = int(doc["params"]["progress"])
+        doc["benchmark"] = doc["benchmark"].split(".")[-1]
         yield dict_keep(doc, "benchmark", "forks", "warmupIterations", "measurementIterations", "mode", "measurementTime", "params", "primaryMetric")
 
 if __name__ == "__main__":
@@ -35,9 +42,15 @@ if __name__ == "__main__":
         delete_index(es)
         print("Index deleted")
         sys.exit(0)
+
+    if sys.argv[1] == "clear":
+        clear_index(es)
+        print("Index cleared")
+        sys.exit(0)
     
     file_path = sys.argv[1]
     create_index(es)
     for doc in doc_iterator(file_path):
         upload_doc(es, doc)
+        print(f"Uploaded: {doc['benchmark']}/{doc['params']['size']}/{doc['params']['listType']}")
     print("Upload successful")
