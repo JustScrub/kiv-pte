@@ -99,11 +99,13 @@ public class SerialBenchmarks extends BaseBenchmarks {
     }
 
     @Benchmark
+    //@Measurement(batchSize = 1000)
     public void add_all_start(AddAllState state) {
         list.addAll(0, state.list);
     }
 
     @Benchmark
+    //@Measurement(batchSize = 1000)
     public void add_all_end(AddAllState state) {
         // 1000x opakované přidání 1000 prvků na konec kolekce
         list.addAll(state.list);
