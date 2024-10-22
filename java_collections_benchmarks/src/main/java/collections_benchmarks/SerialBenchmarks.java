@@ -94,6 +94,7 @@ public class SerialBenchmarks extends BaseBenchmarks {
         
 
     @Benchmark
+    //@Measurement(batchSize = 1000)
     public void add_at_index(IndexedState state) {
         list.add(state.index, state.elem);
     }
