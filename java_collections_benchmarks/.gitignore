@@ -1,4 +1,4 @@
 target
 results.txt
-jmh-result*.json
+jmh-result-old.json
 .venv

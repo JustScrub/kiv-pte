@@ -27,7 +27,10 @@ def doc_iterator(file_path: str):
         if "progress" in doc["params"]:
             doc["params"]["progress"] = int(doc["params"]["progress"])
         doc["benchmark"] = doc["benchmark"].split(".")[-1]
-        yield dict_keep(doc, "benchmark", "forks", "warmupIterations", "measurementIterations", "mode", "measurementTime", "params", "primaryMetric")
+        
+        doc = dict_keep(doc, "benchmark", "forks", "warmupIterations", "measurementIterations", "mode", "measurementTime", "params", "primaryMetric")
+        doc["primaryMetric"] = dict_keep(doc["primaryMetric"], "score", "scoreError", "scoreConfidence", "scorePercentiles", "scoreUnit")
+        yield doc
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:
@@ -52,5 +55,5 @@ if __name__ == "__main__":
     create_index(es)
     for doc in doc_iterator(file_path):
         upload_doc(es, doc)
-        print(f"Uploaded: {doc['benchmark']}/{doc['params']['size']}/{doc['params']['listType']}")
+        print(f"Uploaded: {doc['benchmark']}/{'/'.join(str(v) for v in doc['params'].values())}")
     print("Upload successful")
