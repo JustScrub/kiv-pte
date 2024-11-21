@@ -28,4 +28,3 @@ if __name__ == "__main__":
     for round, runset in enumerate(runsets,1):
         pargs = gen_pargs(runset)
         os.system(" ".join(args + pargs + [f"-f{outdir}/{round:02}", "REST-SamPrace-soapui-project.xml"]))
-        break
