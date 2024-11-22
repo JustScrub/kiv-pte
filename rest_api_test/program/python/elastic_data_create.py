@@ -41,7 +41,7 @@ class tc_data:
             "nameTC": self.tc_name,
             "status": self.status,
             "timestamp": self.timestamp,
-            "totalTime": str(self.total_time),
+            "totalTime": self.total_time,
             "httpMethod": self.http_method,
             "message": '\n'.join(filter(None, self.messages))
         }
@@ -109,10 +109,11 @@ if __name__ == "__main__":
         root = ET.parse(os.path.join(inter_dir, round, xml_file)).getroot()
         for tk in root:
             ts,tc = ts_tc_from_tk(tk.attrib["name"])
+            data = tc_data(round, ts, tc, tk.attrib["status"], tk.attrib["timestamp"], float(tk.attrib["totalTime"]), ts.split("::")[1])
             if tc not in TCs[round]:
-                TCs[round][tc] = tc_data(round, ts, tc, tk.attrib["status"], tk.attrib["timestamp"], int(tk.attrib["totalTime"]), tk.attrib["httpMethod"])
+                TCs[round][tc] = data
             else:
-                TCs[round][tc] <<= tc_data(round, ts, tc, tk.attrib["status"], tk.attrib["timestamp"], int(tk.attrib["totalTime"]), tk.attrib["httpMethod"])
+                TCs[round][tc] <<= data
             if len(tk) > 0: # messages are children of tk
                 for message in tk:
                     TCs[round][tc].messages.append(message.text)

@@ -2,12 +2,15 @@ import os, sys
 
 properties = ("sla", "slaGET", "login", "loginDELETE")
 
+LONG_SLA = 7000
+SHORT_SLA = 10
+
 runsets = [
-    (700, 700, "mladyPTE", "mladyPTE"),
-    (10, 700, "mladyPTE", "mladyPTE"),
-    (700, 10, "mladyPTE", "mladyPTE"),
-    (10, 10, "mladyPTE", "mladyPTE"),
-    (700, 700, "mladyPTE", "mlady"),
+    (LONG_SLA, LONG_SLA, "mladyPTE", "mladyPTE"),
+    (SHORT_SLA, LONG_SLA, "mladyPTE", "mladyPTE"),
+    (LONG_SLA, SHORT_SLA, "mladyPTE", "mladyPTE"),
+    (SHORT_SLA, SHORT_SLA, "mladyPTE", "mladyPTE"),
+    (LONG_SLA, LONG_SLA, "mladyPTE", "mlady"),
 ]
 
 def gen_pargs(runset):
